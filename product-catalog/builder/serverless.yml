@@ -168,7 +168,7 @@ resources:
                    Resource:
                     Fn::Join:
                       - '/'
-                      - - !Sub 'arn:aws:dynamodb:ap-northeast-2:${AWS::AccountId}:table'
+                      - - !Sub 'arn:aws:dynamodb:ap-northeast-2:590183717745:table'
                         - Ref: ProductCategory
                 -  Effect: Allow
                    Action:
@@ -176,7 +176,7 @@ resources:
                    Resource:
                     Fn::Join:
                       - '/'
-                      - - !Sub 'arn:aws:dynamodb:ap-northeast-2:${AWS::AccountId}:table'
+                      - - !Sub 'arn:aws:dynamodb:ap-northeast-2:590183717745:table'
                         - Ref: ProductCatalog
 
   Outputs:
