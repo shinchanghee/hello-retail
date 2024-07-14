@@ -10,7 +10,7 @@ custom:
 provider:
   name: aws
   runtime: nodejs20.x
-  region: ap-norhteast-2
+  region: ap-northeast-2
   memorySize: ${env:MEMORY_SIZE}
   stage: dev
   iam:
@@ -104,26 +104,8 @@ resources:
                     - 'kinesis:ListStreams'
                   Resource:
                     Fn::ImportValue: hello-retail-stream:dev:RetailStreamArn:1
-          - putPhotoRegistrations:
-              PolicyName: PutPhotoRegistrations
-              PolicyDocument:
-                Version: '2012-10-17'
-                Statement:
-                  -  Effect: Allow
-                    Action:
-                      - 'dynamodb:PutItem'
-                    Resource:
-                      'Fn::ImportValue': hello-retail-product-photos-data:dev:PhotoRegistrationsTableArn:1
-          - updatePhotoRegistrations:
-              PolicyName: UpdatePhotoRegistrations
-              PolicyDocument:
-                Version: '2012-10-17'
-                Statement:
-                  -  Effect: Allow
-                    Action:
-                      - 'dynamodb:UpdateItem'
-                    Resource:
-                      'Fn::ImportValue': hello-retail-product-photos-data:dev:PhotoRegistrationsTableArn:1
+          - ${file(./../productPhotos.yml):putPhotoRegistrations}
+          - ${file(./../productPhotos.yml):updatePhotoRegistrations}
           - PolicyName: ExecuteStepFunction  # see https://forums.aws.amazon.com/thread.jspa?messageID=755476&tstart=0 for StepFunction IAM docs
             PolicyDocument:
               Version: '2012-10-17'

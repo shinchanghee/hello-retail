@@ -105,7 +105,7 @@ class ServerlessPlugin {
 
   getBucketName() {
     const stage = this.serverless.variables.service.custom.stage
-    const s3Bucket = stage === 'prod' ?
+    const s3Bucket = stage === 'dev' ?
       this.serverless.service.custom.domainName :
       `${stage}.${this.serverless.service.custom.domainName}`
 

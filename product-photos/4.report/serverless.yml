@@ -89,8 +89,8 @@ resources:
                       - ':'
                       - - 'Fn::GetAtt': [ ReportLogGroup, Arn ]
                         - '*'
-          - ${file(./../productPhotos.yml):updatePhotoRegistrations}:
-          - ${file(./../productPhotos.yml):deletePhotoAssignment}:
+          - ${file(./../productPhotos.yml):updatePhotoRegistrations}
+          - ${file(./../productPhotos.yml):deletePhotoAssignment}
           - PolicyName: WriteToRetailStream
             PolicyDocument:
               Version: '2012-10-17'

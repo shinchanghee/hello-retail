@@ -9,7 +9,7 @@ States:
         States:
           AssignPhotographer:
             Type: Task
-            Resource: arn:aws:lambda:${self:custom.private.region}:${env:ACCOUNT_ID}:function:${self:custom.productPhotos.assignName}-${self:custom.stage}-assign
+            Resource: arn:aws:lambda:ap-northeast-2:${env:ACCOUNT_ID}:function:hello-retail-product-photos-assign-dev-assign
             Retry:
               - ErrorEquals:
                   - States.ALL
@@ -31,7 +31,7 @@ States:
         States:
           AwaitPhoto:
             Type: Task
-            Resource: ${self:custom.productPhotos.receiveActivityArn}
+            Resource: arn:aws:states:ap-northeast-2:${env:ACCOUNT_ID}:activity:dev-hello-retail-product-photos-receive
             TimeoutSeconds: 600
             Catch:
               - ErrorEquals:
@@ -41,7 +41,7 @@ States:
             Next: AwaitPhotoSucceed
           AwaitPhotoFail:
             Type: Task
-            Resource: arn:aws:lambda:${self:custom.private.region}:${env:ACCOUNT_ID}:function:${self:custom.productPhotos.failName}-${self:custom.stage}-fail
+            Resource: arn:aws:lambda:ap-northeast-2:${env:ACCOUNT_ID}:function:hello-retail-product-photos-fail-dev-fail
             Retry:
               - ErrorEquals:
                   - States.ALL
@@ -59,7 +59,7 @@ States:
             Error: RepeatedFailure
           AwaitPhotoSucceed:
             Type: Task
-            Resource: arn:aws:lambda:${self:custom.private.region}:${env:ACCOUNT_ID}:function:${self:custom.productPhotos.successName}-${self:custom.stage}-success
+            Resource: arn:aws:lambda:ap-northeast-2:${env:ACCOUNT_ID}:function:hello-retail-product-photos-success-dev-success
             Retry:
               - ErrorEquals:
                   - States.ALL
@@ -84,7 +84,7 @@ States:
     Next: CompleteAssignment
   CompleteAssignment:
     Type: Task
-    Resource: arn:aws:lambda:${self:custom.private.region}:${env:ACCOUNT_ID}:function:${self:custom.productPhotos.reportName}-${self:custom.stage}-report
+    Resource: arn:aws:lambda:ap-northeast-2:${env:ACCOUNT_ID}:function:hello-retail-product-photos-report-dev-report
     Retry:
       - ErrorEquals:
           - States.ALL

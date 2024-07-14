@@ -3,7 +3,8 @@ frameworkVersion: "^4.1.12"
 service: hello-retail-website
 
 plugins:
-  - web-app-build-plugin
+  - ./.serverless_plugins/web-app-build-plugin.js
+
 
 custom:
   # AWS ARN for the S3 bucket used to host the site.
@@ -27,33 +28,25 @@ custom:
   domainName: hello-retail.biz
 
   # Fully Qualified Domain Name for the hosted website.
-  dnsHostName:
+  dnsHostName: 
     Fn::If: # e.g. hello-retail.biz or stage.hello-retail.biz
       - ProductionStage
       - hello-retail.biz
       - dev.hello-retail.biz
 
   # FQDN for direct access to S3 bucket website.
-  originDomainName:
+  originDomainName: 
     Fn::Join: # e.g. hello-retail.biz.s3.amazonaws.com
       - ''
-      - - dnsHostName:
-            Fn::If: # e.g. hello-retail.biz or stage.hello-retail.biz
-              - ProductionStage
-              - hello-retail.biz
-              - dev.hello-retail.biz
+      - - ${custom.dnsHostName}
         - '.s3.amazonaws.com'
 
   # Identifier used for the S3 origin in CloudFront.
-  originId:
+  originId: 
     Fn::Join: # e.g. S3-hello-retail.biz or S3-stage.hello-retail.biz
       - ''
-      - - 'S3-'
-        - dnsHostName:
-            Fn::If: # e.g. hello-retail.biz or stage.hello-retail.biz
-              - ProductionStage
-              - hello-retail.biz
-              - dev.hello-retail.biz
+      - - 's3-'
+        - ${custom.dnsHostName}
 
   # Import secrets.
   retailStreamVersion: 1
@@ -157,8 +150,8 @@ resources:
       Properties:
         BucketName: ${custom.dnsHostName}
         WebsiteConfiguration:
-          IndexDocument: index.html
-          ErrorDocument: error.html
+          IndexDocument: ./app/index.html
+          ErrorDocument: ./app/error.html
         CorsConfiguration:
           CorsRules:
             - AllowedMethods:
@@ -184,7 +177,7 @@ resources:
               Effect: Allow
               Resource: ${custom.bucketArn}
               Principal:
-                aws:
+                AWS:
                   - 'arn:aws:iam::${env:ACCOUNT_ID}:role/devHelloRetailWebIdentity'
       DependsOn:
         - HelloRetailWebBucket
@@ -204,8 +197,8 @@ resources:
           CustomErrorResponses:
             - ErrorCode: 403
               ResponseCode: 200
-              ResponsePagePath: /error.html
-          DefaultRootObject: index.html
+              ResponsePagePath: ./app/error.html
+          DefaultRootObject: ./app/index.html
           #Aliases:
           #- ${self:custom.dnsHostName}
           DefaultCacheBehavior:
