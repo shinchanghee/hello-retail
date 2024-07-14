@@ -96,7 +96,7 @@ resources:
                       - ':'
                       - - Fn::GetAtt: [ ReceiveLogGroup, Arn ]
                         - '*'
-          - ${self:custom.productPhotos.getPhotoAssignment}
+          - ${file(./../productPhotos.yml):getPhotoAssignment}
           - PolicyName: StoreImageInBucket
             PolicyDocument:
               Version: '2012-10-17'

@@ -82,16 +82,7 @@ resources:
                       - ':'
                       - - 'Fn::GetAtt': [ FailLogGroup, Arn ]
                         - '*'
-          - deletePhotoAssignment:
-              PolicyName: DeletePhotoAssignment
-              PolicyDocument:
-                Version: '2012-10-17'
-                Statement:
-                  -  Effect: Allow
-                    Action:
-                      - 'dynamodb:DeleteItem'
-                    Resource:
-                      'Fn::ImportValue': hello-retail-product-photos-data:dev:PhotoAssignmentsTableArn:1
+          - ${file(./../productPhotos.yml):deletePhotoAssignment}
   Outputs:
     FailLambdaName:
       Description: The Name of the Photo Assignments Fail Lambda

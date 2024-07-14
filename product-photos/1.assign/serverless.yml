@@ -9,7 +9,7 @@ custom:
 provider:
   name: aws
   runtime: nodejs20.x
-  region: ap-nortoeast-2
+  region: ap-northeast-2
   stage: dev
   memorySize: ${env:MEMORY_SIZE}
   timeout: 65
@@ -96,36 +96,9 @@ resources:
                     - 'states:GetActivityTask'
                     - 'states:SendTaskFailure'
                   Resource: arn:aws:states:ap-northeast-2:${env:ACCOUNT_ID}:activity:dev-hello-retail-product-photos-receive
-          - updatePhotoAssignment:
-              PolicyName: UpdatePhotoAssignment
-              PolicyDocument:
-                Version: '2012-10-17'
-                Statement:
-                  - Effect: Allow
-                    Action:
-                      - 'dynamodb:UpdateItem'
-                    Resource:
-                      'Fn::ImportValue': hello-retail-product-photos-data:dev:PhotoAssignmentsTableArn:1
-          - queryPhotoRegistrationsAssignmentsIndex:
-              PolicyName: QueryPhotoRegistrationsAssignmentsIndex
-              PolicyDocument:
-                Version: '2012-10-17'
-                Statement:
-                  - Effect: Allow
-                    Action:
-                      - 'dynamodb:Query'
-                    Resource:
-                      'Fn::ImportValue': hello-retail-product-photos-data:dev:PhotoRegistrationsTableAssignmentsIndexArn:1
-          - updatePhotoRegistrations:
-              PolicyName: UpdatePhotoRegistrations
-              PolicyDocument:
-                Version: '2012-10-17'
-                Statement:
-                  - Effect: Allow
-                    Action:
-                      - 'dynamodb:UpdateItem'
-                    Resource:
-                      'Fn::ImportValue': hello-retail-product-photos-data:dev:PhotoRegistrationsTableArn:1
+          - ${file(./../productPhotos.yml):updatePhotoAssignment}
+          - ${file(./../productPhotos.yml):queryPhotoRegistrationsAssignmentsIndex}
+          - ${file(./../productPhotos.yml):updatePhotoRegistrations}
   Outputs:
     AssignLambdaName:
       Description: The Name of the Photo Assignments Assign Lambda

@@ -89,26 +89,8 @@ resources:
                       - ':'
                       - - 'Fn::GetAtt': [ ReportLogGroup, Arn ]
                         - '*'
-          - updatePhotoRegistrations:
-              PolicyName: UpdatePhotoRegistrations
-              PolicyDocument:
-                Version: '2012-10-17'
-                Statement:
-                  -  Effect: Allow
-                    Action:
-                      - 'dynamodb:UpdateItem'
-                    Resource:
-                      'Fn::ImportValue': hello-retail-product-photos-data:dev:PhotoRegistrationsTableArn:1
-          - deletePhotoAssignment:
-              PolicyName: DeletePhotoAssignment
-              PolicyDocument:
-                Version: '2012-10-17'
-                Statement:
-                  -  Effect: Allow
-                    Action:
-                      - 'dynamodb:DeleteItem'
-                    Resource:
-                      'Fn::ImportValue': hello-retail-product-photos-data:dev:PhotoAssignmentsTableArn:1
+          - ${file(./../productPhotos.yml):updatePhotoRegistrations}:
+          - ${file(./../productPhotos.yml):deletePhotoAssignment}:
           - PolicyName: WriteToRetailStream
             PolicyDocument:
               Version: '2012-10-17'
