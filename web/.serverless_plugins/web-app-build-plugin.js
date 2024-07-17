@@ -108,7 +108,7 @@ class ServerlessPlugin {
     const s3Bucket = stage === 'dev' ?
       this.serverless.service.custom.domainName :
       `${stage}.${this.serverless.service.custom.domainName}`
-
+    console.log(s3Bucket);
     return s3Bucket;
   }
 

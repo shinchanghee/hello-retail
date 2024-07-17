@@ -19,7 +19,8 @@ provider:
         - Effect: Allow
           Action: # Gives permission to DynamoDB tables in a specific region
             - dynamodb:PutItem
-          Resource: !Sub "arn:aws:dynamodb:ap-northeast-2:590183717745:table/${MetricsTablePhotoFail}"
+            - dynamodb:*
+          Resource: !Sub "arn:aws:dynamodb:ap-northeast-2:590183717745:table/metrics.photo-assign"
 
 functions:
   assign:

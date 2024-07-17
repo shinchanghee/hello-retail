@@ -94,6 +94,9 @@ const api = {
   // TODO this is only filter/query impl, also handle single item request
   // TODO deal with pagination
   products: (event, context, callback) => {
+    if (event.queryStringParameters === null) {
+      event.queryStringParameters = {};
+    }
     if (!ajv.validate(productsRequestSchemaId, event)) { // bad request
       callback(null, impl.clientError(productsRequestSchemaId, ajv.errorsText(), event))
     } else {
@@ -111,6 +114,9 @@ const api = {
           },
           ExpressionAttributeValues: {
             ':i': event.queryStringParameters.id,
+            ':b': event.queryStringParameters.brand,
+            ':n': event.queryStringParameters.name,
+            ':d': event.queryStringParameters.description,
           },
           Limit: 1,
         }
@@ -118,7 +124,7 @@ const api = {
         params = {
           TableName: constants.TABLE_PRODUCT_CATALOG_NAME,
           IndexName: 'Category',
-          ProjectionExpression: '#i, #b, #n, #d',
+          ProjectionExpression: '#i, #c, #b, #n, #d',
           KeyConditionExpression: '#c = :c',
           ExpressionAttributeNames: {
             '#i': 'id',
@@ -128,7 +134,11 @@ const api = {
             '#d': 'description',
           },
           ExpressionAttributeValues: {
+            ':i': event.queryStringParameters.id,
             ':c': event.queryStringParameters.category,
+            ':b': event.queryStringParameters.brand,
+            ':n': event.queryStringParameters.name,
+            ':d': event.queryStringParameters.description,
           },
         }
       }

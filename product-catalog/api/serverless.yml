@@ -34,8 +34,8 @@ functions:
       Fn::GetAtt: [ ProductCatalogApiCategoriesReader, Arn ]
     handler: catalogApi.categories
     environment:
-      TABLE_PRODUCT_CATEGORY_NAME:
-        Fn::ImportValue: hello-retail-product-catalog-builder:dev:ProductCategoryTableName:1
+      TABLE_PRODUCT_CATEGORY_NAME: dev-ProductCategory-1 
+       
     events:
       - http:
           path: categories
@@ -46,8 +46,8 @@ functions:
       Fn::GetAtt: [ ProductCatalogApiProductsReader, Arn ]
     handler: catalogApi.products
     environment:
-      TABLE_PRODUCT_CATALOG_NAME:
-        Fn::ImportValue: hello-retail-product-catalog-builder:dev:ProductCatalogTableName:1
+      TABLE_PRODUCT_CATALOG_NAME: dev-ProductCatalog-1 
+      
     events:
       - http:
           path: products
@@ -120,7 +120,7 @@ resources:
                 -  Effect: Allow
                    Action:
                      - 'dynamodb:Scan'
-                   Resource:
+                   Resource: 
                     Fn::ImportValue: hello-retail-product-catalog-builder:dev:ProductCategoryTableArn:1
     ProductCatalogApiProductsReader: # role for Products Lambda
       Type: AWS::IAM::Role
@@ -173,7 +173,6 @@ resources:
   Outputs:
     ProductCatalogRestApi:
       Description: API used to access the product and category catalog in DynamoDB
-      Value:
-        Ref: ApiGatewayRestApi
+      Value: https://nupdssmjxk.execute-api.ap-northeast-2.amazonaws.com/dev
       Export:
-        Name: hello-retail-product-catalog-api:dev:ProductCatalogRestApi:1
+        Name: hello-retail-product-catalog-api:dev:ApiGatewayRestApi:1

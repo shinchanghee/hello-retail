@@ -43,7 +43,7 @@ custom:
 
   # Identifier used for the S3 origin in CloudFront.
   originId: 
-    Fn::Join: # e.g. S3-hello-retail.biz or S3-stage.hello-retail.biz
+    Fn::Join: # e.g. S3-hello-retail.biz or S3-dev.hello-retail.biz
       - ''
       - - 's3-'
         - ${custom.dnsHostName}
@@ -93,10 +93,10 @@ provider:
 
 resources:
   Conditions:
-     ProductionStage:
+     ProductionStage: 
        Fn::Equals:
          - dev
-         - prod
+         - dev
 
   Resources:
 
@@ -148,10 +148,10 @@ resources:
     HelloRetailWebBucket:
       Type: AWS::S3::Bucket
       Properties:
-        BucketName: ${custom.dnsHostName}
+        BucketName: hello-retail.biz
         WebsiteConfiguration:
-          IndexDocument: ./app/index.html
-          ErrorDocument: ./app/error.html
+          IndexDocument: index.html
+          ErrorDocument: error.html
         CorsConfiguration:
           CorsRules:
             - AllowedMethods:
@@ -168,12 +168,12 @@ resources:
         PolicyDocument:
           Statement:
             - Action:
-                - s3:GetObject
+                - s3:*
               Effect: Allow
               Resource: ${custom.bucketArn}
               Principal: '*'
             - Action:
-                - s3:PutObject
+                - s3:*
               Effect: Allow
               Resource: ${custom.bucketArn}
               Principal:
@@ -190,15 +190,15 @@ resources:
         DistributionConfig:
           Origins:
             - Id: ${custom.originId}
-              DomainName: ${custom.originDomainName}
+              DomainName: hello-retail.biz.s3.amazonaws.com
               S3OriginConfig:
                 OriginAccessIdentity: ''
           Enabled: true
           CustomErrorResponses:
             - ErrorCode: 403
               ResponseCode: 200
-              ResponsePagePath: ./app/error.html
-          DefaultRootObject: ./app/index.html
+              ResponsePagePath: /error.html
+          DefaultRootObject: index.html
           #Aliases:
           #- ${self:custom.dnsHostName}
           DefaultCacheBehavior:

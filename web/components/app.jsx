@@ -24,7 +24,7 @@ class App extends Component {
           <div className="content">
             {children}
           </div>
-          {config.Stage !== 'prod' ? (<h6 className="stageLabel">{config.Stage}</h6>) : null }
+          {config.Stage !== 'dev' ? (<h6 className="stageLabel">{config.Stage}</h6>) : null }
         </div>
       </div>
     )
